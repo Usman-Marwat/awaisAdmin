@@ -10,12 +10,16 @@ import {
 	Rating,
 	useTheme,
 	useMediaQuery,
+	TextField,
 } from '@mui/material';
 import { AddCircle, DeleteOutline } from '@mui/icons-material';
+import SendIcon from '@mui/icons-material/Send';
+import IosShareIcon from '@mui/icons-material/IosShare';
 import { useNavigate } from 'react-router-dom';
 
 import Header from '../../components/Header';
 import { useGetProductsQuery, useDeleteProductMutation } from '../../state/api';
+import FlexBetween from '../../components/FlexBetween';
 
 const Product = ({
 	_id,
@@ -88,13 +92,26 @@ const Product = ({
 					<Typography>
 						Yearly Units Sold This Year: {stat.yearlyTotalSoldUnits}
 					</Typography>
-					<Box marginTop={1}>
+					<Box sx={{ marginTop: 3 }}>
+						<FlexBetween>
+							<TextField
+								label="Coupon"
+								variant="filled"
+								placeholder="promo code"
+							/>
+							<Button size="small" onClick={() => {}}>
+								<IosShareIcon />
+							</Button>
+						</FlexBetween>
+					</Box>
+					<Box marginTop={1} sx={{ justifyContent: 'flex-end' }}>
 						<Button
+							sx={{ color: 'red' }}
 							variant="outlined"
 							size="small"
 							onClick={() => handleDelete(_id)}
 						>
-							Delete <DeleteOutline />
+							<DeleteOutline />
 						</Button>
 					</Box>
 				</CardContent>

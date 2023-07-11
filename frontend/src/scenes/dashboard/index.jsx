@@ -26,6 +26,7 @@ import { useGetDashboardQuery } from '../../state/api';
 const Dashboard = () => {
 	const theme = useTheme();
 	const isNonMediumScreens = useMediaQuery('(min-width: 1200px)');
+	const isMobile = useMediaQuery('(max-width: 490px)');
 	const { data, isLoading } = useGetDashboardQuery();
 
 	const columns = [
@@ -64,20 +65,22 @@ const Dashboard = () => {
 			<FlexBetween>
 				<Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
 
-				<Box>
-					<Button
-						sx={{
-							backgroundColor: theme.palette.secondary.light,
-							color: theme.palette.background.alt,
-							fontSize: '14px',
-							fontWeight: 'bold',
-							padding: '10px 20px',
-						}}
-					>
-						<DownloadOutlined sx={{ mr: '10px' }} />
-						Download Reports
-					</Button>
-				</Box>
+				{!isMobile && (
+					<Box>
+						<Button
+							sx={{
+								backgroundColor: theme.palette.secondary.light,
+								color: theme.palette.background.alt,
+								// fontSize: '14px',
+								fontWeight: 'bold',
+								// padding: '10px 20px',
+							}}
+						>
+							<DownloadOutlined />
+							Download
+						</Button>
+					</Box>
+				)}
 			</FlexBetween>
 
 			<Box
