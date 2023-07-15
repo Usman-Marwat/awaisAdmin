@@ -80,6 +80,18 @@ export const api = createApi({
 			}),
 			invalidatesTags: ['Products'],
 		}),
+		addCategory: build.mutation({
+			query: (product) => ({
+				url: '/product/category',
+				method: 'POST',
+				body: product,
+			}),
+			invalidatesTags: ['Products'],
+		}),
+		getCategory: build.query({
+			query: () => 'product/category',
+			providesTags: ['Products'],
+		}),
 	}),
 });
 
@@ -97,4 +109,6 @@ export const {
 	useEditProductMutation,
 	useAddProductMutation,
 	useDeleteProductMutation,
+	useAddCategoryMutation,
+	useGetCategoryQuery,
 } = api;

@@ -1,11 +1,25 @@
-import { Box, Button, TextField, Typography, useTheme } from '@mui/material';
+import {
+	Box,
+	Button,
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
+	TextField,
+	Typography,
+	useTheme,
+} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { useAddProductMutation } from '../../state/api';
+import {
+	useAddCategoryMutation,
+	useAddProductMutation,
+	useGetCategoryQuery,
+} from '../../state/api';
 import Header from '../../components/Header';
 import FlexBetween from '../../components/FlexBetween';
 import { useState } from 'react';
@@ -17,12 +31,19 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 const AddProduct = () => {
 	const theme = useTheme();
 	const isNonMobile = useMediaQuery('(min-width:600px)');
-	const [showCategory, setCategory] = useState(false);
+	const [categoryName, setCategoryName] = useState('');
 	const [addProduct] = useAddProductMutation();
+	const [addCategory] = useAddCategoryMutation();
+	const { data, isLoading } = useGetCategoryQuery();
 
 	const handleFormSubmit = (values, { resetForm }) => {
 		addProduct({ ...values });
 		resetForm();
+	};
+
+	const handleCategoryName = () => {
+		addCategory({ name: categoryName });
+		setCategoryName('');
 	};
 
 	return (
@@ -41,18 +62,20 @@ const AddProduct = () => {
 					</AccordionSummary>
 					<AccordionDetails>
 						<TextField
+							value={categoryName}
 							fullWidth
 							variant="filled"
 							type="text"
 							label="Category Name"
 							sx={{ gridColumn: 'span 2' }}
+							onChange={(e) => setCategoryName(e.target.value)}
 						/>
 					</AccordionDetails>
 					<AccordionActions>
 						<Button
 							variant="primary"
 							size="small"
-							onClick={() => setCategory(true)}
+							onClick={() => handleCategoryName()}
 							fullWidth={true}
 						>
 							<AddCircleIcon />
@@ -97,7 +120,27 @@ const AddProduct = () => {
 								helperText={touched.name && errors.name}
 								sx={{ gridColumn: 'span 2' }}
 							/>
-							<TextField
+							<FormControl fullWidth>
+								<InputLabel id="demo-simple-select-label">Category</InputLabel>
+								<Select
+									labelId="demo-simple-select-label"
+									id="demo-simple-select"
+									name="category"
+									onBlur={handleBlur}
+									error={!!touched.category && !!errors.category}
+									label="category"
+									onChange={handleChange}
+									value={values.category}
+									sx={{ gridColumn: 'span 2' }}
+								>
+									{data?.map((category, i) => (
+										<MenuItem value={category.name} key={i}>
+											{category.name}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+							{/* <TextField
 								fullWidth
 								variant="filled"
 								type="text"
@@ -109,7 +152,7 @@ const AddProduct = () => {
 								error={!!touched.category && !!errors.category}
 								helperText={touched.category && errors.category}
 								sx={{ gridColumn: 'span 2' }}
-							/>
+							/> */}
 
 							<TextField
 								fullWidth

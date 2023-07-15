@@ -38,6 +38,7 @@ export const editProduct = async (req, res) => {
 export const addCategory = async (req, res) => {
 	try {
 		const category = await Category.create({ ...req.body });
+		console.log('sucess');
 		res.status(200).json('Success');
 	} catch (error) {
 		res.status(404).json({ message: error.message });
