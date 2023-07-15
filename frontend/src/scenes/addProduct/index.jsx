@@ -1,14 +1,23 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography, useTheme } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
+
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { useAddProductMutation } from '../../state/api';
 import Header from '../../components/Header';
+import FlexBetween from '../../components/FlexBetween';
+import { useState } from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 const AddProduct = () => {
+	const theme = useTheme();
 	const isNonMobile = useMediaQuery('(min-width:600px)');
-
+	const [showCategory, setCategory] = useState(false);
 	const [addProduct] = useAddProductMutation();
 
 	const handleFormSubmit = (values, { resetForm }) => {
@@ -18,10 +27,39 @@ const AddProduct = () => {
 
 	return (
 		<Box m="20px">
-			<Header
-				title="Add Product"
-				subtitle="Create a new Product in your Inventory"
-			/>
+			<FlexBetween>
+				<Header
+					title="Add Product"
+					subtitle="Create a new Product in your Inventory"
+				/>
+
+				<Accordion sx={{ backgroundColor: theme.palette.secondary[700] }}>
+					<AccordionSummary>
+						<Box>
+							<Typography>Add A New Product Category</Typography>
+						</Box>
+					</AccordionSummary>
+					<AccordionDetails>
+						<TextField
+							fullWidth
+							variant="filled"
+							type="text"
+							label="Category Name"
+							sx={{ gridColumn: 'span 2' }}
+						/>
+					</AccordionDetails>
+					<AccordionActions>
+						<Button
+							variant="primary"
+							size="small"
+							onClick={() => setCategory(true)}
+							fullWidth={true}
+						>
+							<AddCircleIcon />
+						</Button>
+					</AccordionActions>
+				</Accordion>
+			</FlexBetween>
 
 			<Formik
 				onSubmit={handleFormSubmit}
@@ -128,10 +166,10 @@ const AddProduct = () => {
 
 const checkoutSchema = yup.object().shape({
 	name: yup.string().required('required'),
-	price: yup.number().required('required'),
+	price: yup.string().required('required'),
 	description: yup.string().required('required'),
 	category: yup.string().required('required'),
-	supply: yup.number().required('required'),
+	supply: yup.string().required('required'),
 });
 const initialValues = {
 	name: '',

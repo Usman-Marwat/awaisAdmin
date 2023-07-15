@@ -72,6 +72,14 @@ export const api = createApi({
 			}),
 			invalidatesTags: ['Products'],
 		}),
+		editProduct: build.mutation({
+			query: (product) => ({
+				url: '/product/edit',
+				method: 'POST',
+				body: product,
+			}),
+			invalidatesTags: ['Products'],
+		}),
 	}),
 });
 
@@ -86,6 +94,7 @@ export const {
 	useGetUserPerformanceQuery,
 	useGetDashboardQuery,
 
+	useEditProductMutation,
 	useAddProductMutation,
 	useDeleteProductMutation,
 } = api;
