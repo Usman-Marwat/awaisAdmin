@@ -1,6 +1,8 @@
 import React from 'react';
-import { Box, useTheme } from '@mui/material';
+import { Box, useTheme, Fab } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useGetAdminsQuery } from '../../state/api';
 import Header from '../../components/Header';
@@ -44,12 +46,58 @@ const Admin = () => {
 			headerName: 'Occupation',
 			flex: 1,
 		},
+		// {
+		// 	field: 'role',
+		// 	headerName: 'Role',
+		// 	flex: 0.5,
+		// },
 		{
-			field: 'role',
-			headerName: 'Role',
+			field: 'delete',
+			headerName: 'Delete',
+			sortable: false,
+			width: 140,
+			disableClickEventBubbling: true,
+			renderCell: (params) => {
+				return (
+					<Box
+						display="flex"
+						sx={{
+							flex: 1,
+						}}
+					>
+						<Fab size="small" aria-label="edit">
+							<DeleteIcon />
+						</Fab>
+					</Box>
+				);
+			},
+			flex: 0.5,
+		},
+		{
+			field: 'disable',
+			headerName: 'Disable',
+			sortable: false,
+			width: 140,
+			disableClickEventBubbling: true,
+			renderCell: (params) => {
+				return (
+					<Box
+						display="flex"
+						sx={{
+							flex: 1,
+						}}
+					>
+						<Fab size="small" aria-label="edit">
+							<CloseIcon />
+						</Fab>
+					</Box>
+				);
+			},
 			flex: 0.5,
 		},
 	];
+
+	if (!data) return;
 
 	return (
 		<Box m="1.5rem 2.5rem">

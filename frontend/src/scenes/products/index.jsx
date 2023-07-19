@@ -16,7 +16,7 @@ import { AddCircle, DeleteOutline } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
@@ -59,9 +59,15 @@ const Products = () => {
 	return (
 		<Box m="1.5rem 2.5rem">
 			<Header title="PRODUCTS" subtitle="See your list of products." />
-			<Button onClick={() => {}}>
-				Add Product <AddCircle onClick={() => navigate(`/addProduct`)} />
-			</Button>
+			<Link to={'/addProduct'} style={{ textDecoration: 'none' }}>
+				<Box sx={{ marginTop: 1 }}>
+					<Button type="submit" color="secondary" variant="contained">
+						<Typography mr="0.7rem">Add Product</Typography>{' '}
+						<AddCircle color="white" />
+					</Button>
+				</Box>
+			</Link>
+
 			{data || !isLoading ? (
 				<Box
 					mt="20px"

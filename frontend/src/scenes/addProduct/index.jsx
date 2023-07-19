@@ -10,6 +10,8 @@ import {
 	useTheme,
 } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
+import MultiSelect from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -27,6 +29,16 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionActions from '@mui/material/AccordionActions';
 import AccordionDetails from '@mui/material/AccordionDetails';
+
+const animatedComponents = makeAnimated();
+const colourOptions = [
+	{ value: 'red', label: 'Red' },
+	{ value: 'green', label: 'Green' },
+	{ value: 'blue', label: 'Blue' },
+	{ value: 'purple', label: 'Purple' },
+	{ value: 'coral', label: 'Coral' },
+	{ value: 'yellow', label: 'Yellow' },
+];
 
 const AddProduct = () => {
 	const theme = useTheme();
@@ -125,6 +137,7 @@ const AddProduct = () => {
 								<Select
 									labelId="demo-simple-select-label"
 									id="demo-simple-select"
+									variant="filled"
 									name="category"
 									onBlur={handleBlur}
 									error={!!touched.category && !!errors.category}
@@ -194,6 +207,50 @@ const AddProduct = () => {
 								helperText={touched.supply && errors.supply}
 								sx={{ gridColumn: 'span 2' }}
 							/>
+
+							<Typography
+								variant="h5"
+								color={theme.palette.secondary[300]}
+								sx={{ gridColumn: 'span 4', marginTop: 2 }}
+							>
+								Attributes
+							</Typography>
+
+							<Box sx={{ gridColumn: 'span 2' }}>
+								<MultiSelect
+									styles={{
+										menu: (baseStyles, state) => ({
+											...baseStyles,
+											color: state.isFocused ? 'grey' : 'black',
+										}),
+									}}
+									closeMenuOnSelect={false}
+									components={animatedComponents}
+									defaultValue={[colourOptions[1], colourOptions[2]]}
+									isMulti
+									options={colourOptions}
+									placeholder="choose colors"
+								/>
+							</Box>
+							<Box sx={{ gridColumn: 'span 2' }}>
+								<MultiSelect
+									styles={{
+										menu: (baseStyles, state) => ({
+											...baseStyles,
+											color: state.isFocused ? 'grey' : 'black',
+										}),
+									}}
+									closeMenuOnSelect={false}
+									components={animatedComponents}
+									isMulti
+									options={[
+										{ value: 'S', label: 'Small' },
+										{ value: 'M', label: 'Medium' },
+										{ value: 'L', label: 'Large' },
+									]}
+									placeholder="choose sizes"
+								/>
+							</Box>
 						</Box>
 						<Box display="flex" justifyContent="end" mt="20px">
 							<Button type="submit" color="secondary" variant="contained">

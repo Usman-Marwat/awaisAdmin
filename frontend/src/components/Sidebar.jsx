@@ -27,7 +27,6 @@ import {
 	AdminPanelSettingsOutlined,
 	TrendingUpOutlined,
 	PieChartOutlined,
-	AddCircle,
 } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -49,10 +48,6 @@ const navItems = [
 	{
 		text: 'Products',
 		icon: <ShoppingCartOutlined />,
-	},
-	{
-		text: 'AddProduct',
-		icon: <AddCircle />,
 	},
 	{
 		text: 'Customers',
