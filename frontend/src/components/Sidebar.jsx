@@ -294,7 +294,7 @@ const ProductListItem = ({
 				<ListItemIcon sx={sxIcon}>
 					<ShoppingCartOutlined />
 				</ListItemIcon>
-				<ListItemText primary="Prod-Cats" />
+				<ListItemText primary="Products" />
 				{open ? <ExpandLess /> : <ExpandMore />}
 			</ListItemButton>
 

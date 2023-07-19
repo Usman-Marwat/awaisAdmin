@@ -31,25 +31,32 @@ import {
 	useGetProductsQuery,
 	useDeleteProductMutation,
 	useEditProductMutation,
+	useGetCategoryQuery,
 } from '../../state/api';
 import FlexBetween from '../../components/FlexBetween';
 
 const Products = () => {
 	const theme = useTheme();
 	const { data, isLoading } = useGetProductsQuery();
+	const categoryApi = useGetCategoryQuery();
 	const isNonMobile = useMediaQuery('(min-width: 1000px)');
 	const [selected, setSelected] = useState();
 	const [finalData, setFinalData] = useState();
+	const [categories, setCategories] = useState();
 
 	useEffect(() => {
 		setFinalData(data);
 	}, [data]);
 
-	if (!finalData) return;
+	useEffect(() => {
+		setCategories(categoryApi.data);
+	}, [categoryApi.data]);
+
+	if (!finalData || !categories) return;
+
+	const categoriesNames = categories.map((c) => c.name);
 
 	const filterData = ({ field, value }) => {
-		// console.log(field);
-		// console.log(value);
 		setFinalData(data.filter((p) => p[field].includes(value)));
 	};
 
@@ -161,6 +168,7 @@ const Products = () => {
 							key={product._id}
 							item={product}
 							onSelect={(item) => setSelected(item)}
+							categoriesNames={categoriesNames}
 						/>
 					))}
 				</Box>
@@ -171,7 +179,7 @@ const Products = () => {
 	);
 };
 
-const Product = ({ item, onSelect }) => {
+const Product = ({ item, onSelect, categoriesNames }) => {
 	const theme = useTheme();
 	const [isExpanded, setIsExpanded] = useState(false);
 	const navigate = useNavigate();
@@ -195,7 +203,9 @@ const Product = ({ item, onSelect }) => {
 					color={theme.palette.secondary[700]}
 					gutterBottom
 				>
-					{item.category}
+					{categoriesNames.includes(item.category)
+						? item.category
+						: 'Category removed'}
 				</Typography>
 
 				<Typography variant="h5" component="div">

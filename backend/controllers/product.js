@@ -53,3 +53,24 @@ export const getCategory = async (req, res) => {
 		res.status(404).json({ message: error.message });
 	}
 };
+
+export const deleteCategory = async (req, res) => {
+	try {
+		await Category.findByIdAndDelete(req.params.id);
+		res.status(200).json('Success');
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
+};
+
+export const editCategory = async (req, res) => {
+	try {
+		const { name } = req.body;
+		const category = await Category.findById(req.body._id);
+		category.name = name;
+		category.save();
+		res.status(200).json('Success');
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
+};

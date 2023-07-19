@@ -15,6 +15,7 @@ export const api = createApi({
 		'Admins',
 		'Performance',
 		'Dashboard',
+		'Categories',
 	],
 	endpoints: (build) => ({
 		getUser: build.query({
@@ -86,11 +87,26 @@ export const api = createApi({
 				method: 'POST',
 				body: product,
 			}),
-			invalidatesTags: ['Products'],
+			invalidatesTags: ['Categories'],
 		}),
 		getCategory: build.query({
 			query: () => 'product/category',
-			providesTags: ['Products'],
+			providesTags: ['Categories'],
+		}),
+		deleteCategory: build.mutation({
+			query: (id) => ({
+				url: `/product/category/${id}`,
+				method: 'Delete',
+			}),
+			invalidatesTags: ['Categories'],
+		}),
+		editCategory: build.mutation({
+			query: (product) => ({
+				url: '/product/category/edit',
+				method: 'POST',
+				body: product,
+			}),
+			invalidatesTags: ['Categories'],
 		}),
 	}),
 });
@@ -111,4 +127,6 @@ export const {
 	useDeleteProductMutation,
 	useAddCategoryMutation,
 	useGetCategoryQuery,
+	useDeleteCategoryMutation,
+	useEditCategoryMutation,
 } = api;
