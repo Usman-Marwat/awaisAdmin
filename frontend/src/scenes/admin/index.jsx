@@ -4,13 +4,18 @@ import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useGetAdminsQuery } from '../../state/api';
+import { useDeleteAdminMutation, useGetAdminsQuery } from '../../state/api';
 import Header from '../../components/Header';
 import CustomColumnMenu from '../../components/DataGridCustomColumnMenu';
 
 const Admin = () => {
 	const theme = useTheme();
 	const { data, isLoading } = useGetAdminsQuery();
+	const [deleteAdmin] = useDeleteAdminMutation();
+
+	const handleDelete = (admin) => {
+		deleteAdmin(admin._id);
+	};
 
 	const columns = [
 		{
@@ -65,7 +70,11 @@ const Admin = () => {
 							flex: 1,
 						}}
 					>
-						<Fab size="small" aria-label="edit">
+						<Fab
+							size="small"
+							aria-label="delete"
+							onClick={() => handleDelete(params.row)}
+						>
 							<DeleteIcon />
 						</Fab>
 					</Box>

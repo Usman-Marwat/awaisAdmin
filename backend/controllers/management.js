@@ -12,6 +12,15 @@ export const getAdmins = async (req, res) => {
 	}
 };
 
+export const deleteAdmin = async (req, res) => {
+	try {
+		const admin = await User.findByIdAndDelete(req.params.id);
+		res.status(200).json(admin);
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
+};
+
 export const getUserPerformance = async (req, res) => {
 	try {
 		const { id } = req.params;

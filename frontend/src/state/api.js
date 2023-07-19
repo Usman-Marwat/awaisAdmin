@@ -50,6 +50,13 @@ export const api = createApi({
 			query: () => 'management/admins',
 			providesTags: ['Admins'],
 		}),
+		deleteAdmin: build.mutation({
+			query: (id) => ({
+				url: `/management/admins/${id}`,
+				method: 'Delete',
+			}),
+			invalidatesTags: ['Admins'],
+		}),
 		getUserPerformance: build.query({
 			query: (id) => `management/performance/${id}`,
 			providesTags: ['Performance'],
@@ -129,4 +136,5 @@ export const {
 	useGetCategoryQuery,
 	useDeleteCategoryMutation,
 	useEditCategoryMutation,
+	useDeleteAdminMutation,
 } = api;
