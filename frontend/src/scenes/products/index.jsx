@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Box,
 	Card,
@@ -11,11 +11,17 @@ import {
 	useTheme,
 	useMediaQuery,
 	TextField,
+	Autocomplete,
+	ButtonGroup,
+	FormControl,
+	InputLabel,
+	Select,
 } from '@mui/material';
 import { AddCircle, DeleteOutline } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import _ from 'lodash';
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -32,7 +38,20 @@ const Products = () => {
 	const theme = useTheme();
 	const { data, isLoading } = useGetProductsQuery();
 	const isNonMobile = useMediaQuery('(min-width: 1000px)');
-	const [selected, setSelected] = useState(null);
+	const [selected, setSelected] = useState();
+	const [finalData, setFinalData] = useState();
+
+	useEffect(() => {
+		setFinalData(data);
+	}, [data]);
+
+	if (!finalData) return;
+
+	const filterData = ({ field, value }) => {
+		// console.log(field);
+		// console.log(value);
+		setFinalData(data.filter((p) => p[field].includes(value)));
+	};
 
 	if (selected) {
 		return (
@@ -59,14 +78,71 @@ const Products = () => {
 	return (
 		<Box m="1.5rem 2.5rem">
 			<Header title="PRODUCTS" subtitle="See your list of products." />
-			<Link to={'/addProduct'} style={{ textDecoration: 'none' }}>
-				<Box sx={{ marginTop: 1 }}>
+			<Box sx={{ marginTop: 1 }}>
+				<Link to={'/addProduct'} style={{ textDecoration: 'none' }}>
 					<Button type="submit" color="secondary" variant="contained">
 						<Typography mr="0.7rem">Add Product</Typography>{' '}
 						<AddCircle color="white" />
 					</Button>
+				</Link>
+			</Box>
+
+			<Box
+				mt="20px"
+				display="grid"
+				gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+				justifyContent="space-between"
+				rowGap="20px"
+				columnGap="1.5%"
+				flex={1}
+				sx={{
+					'& > div': { gridColumn: isNonMobile ? 'span 2' : 'span 4' },
+				}}
+			>
+				{/* <Box
+					borderBottom={1}
+					borderColor={theme.palette.primary.light}
+					alignItems="center"
+				>
+					<ButtonGroup variant="text" aria-label="text button group">
+						<Button
+							variant="primary"
+							sx={{ opacity: 0.7 }}
+							onClick={() => filterData('category')}
+						>
+							By Category
+						</Button>
+						<Button variant="primary" sx={{ opacity: 0.7 }}>
+							By Price
+						</Button>
+						<Button variant="primary" sx={{ opacity: 0.7 }}>
+							By Rating
+						</Button>
+					</ButtonGroup>
+				</Box> */}
+
+				<Box sx={{ gridColumn: 'span 4' }}>
+					<FilterInput onSelect={filterData} />
 				</Box>
-			</Link>
+
+				<Box>
+					<Autocomplete
+						disablePortal
+						id="combo-box-demo"
+						options={['Category', 'Price', 'Supply']}
+						onClose={(e) => {
+							const text = e.target.outerText.toString();
+							text &&
+								setFinalData(
+									_.sortBy(finalData, [
+										(p) => p[text.toLowerCase()].toLowerCase(),
+									])
+								);
+						}}
+						renderInput={(params) => <TextField {...params} label="Sort By" />}
+					/>
+				</Box>
+			</Box>
 
 			{data || !isLoading ? (
 				<Box
@@ -80,7 +156,7 @@ const Products = () => {
 						'& > div': { gridColumn: isNonMobile ? undefined : 'span 4' },
 					}}
 				>
-					{data.map((product) => (
+					{finalData.map((product) => (
 						<Product
 							key={product._id}
 							item={product}
@@ -319,6 +395,52 @@ const EditForm = ({ selected, onEdit }) => {
 					</form>
 				)}
 			</Formik>
+		</Box>
+	);
+};
+
+const FilterInput = ({ onSelect }) => {
+	const [filterField, setFilterField] = useState();
+	const [filterValue, setFilterValue] = useState(' ');
+
+	useEffect(() => {
+		if (filterField && filterValue)
+			onSelect({
+				field: filterField.toLowerCase(),
+				value: filterValue.toLowerCase(),
+			});
+	}, [filterField, filterValue]);
+
+	return (
+		<Box
+			display="grid"
+			gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+			justifyContent="space-between"
+			rowGap="20px"
+			flex={1}
+		>
+			<Autocomplete
+				disablePortal
+				id="combo-box-demo"
+				options={['Category', 'Price', 'Supply']}
+				onClose={(e) => {
+					const text = e.target.outerText.toString();
+					if (text) {
+						setFilterField(text);
+						setFilterValue('');
+					}
+				}}
+				renderInput={(params) => <TextField {...params} label="Filter By" />}
+				sx={{ gridColumn: 'span 3', borderRight: 2 }}
+			/>
+			<TextField
+				value={filterValue}
+				onChange={(e) => setFilterValue(e.target.value)}
+				id="outlined-basic"
+				label="Value"
+				variant="outlined"
+				sx={{ marginLeft: -0.5, borderLeft: 2 }}
+			/>
 		</Box>
 	);
 };
