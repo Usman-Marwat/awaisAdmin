@@ -9,7 +9,6 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
 import MultiSelect from 'react-select';
 import makeAnimated from 'react-select/animated';
 
@@ -25,10 +24,6 @@ import {
 import Header from '../../components/Header';
 import FlexBetween from '../../components/FlexBetween';
 import { useState } from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionActions from '@mui/material/AccordionActions';
-import AccordionDetails from '@mui/material/AccordionDetails';
 
 const animatedComponents = makeAnimated();
 const colourOptions = [
@@ -43,19 +38,12 @@ const colourOptions = [
 const AddProduct = () => {
 	const theme = useTheme();
 	const isNonMobile = useMediaQuery('(min-width:600px)');
-	const [categoryName, setCategoryName] = useState('');
 	const [addProduct] = useAddProductMutation();
-	const [addCategory] = useAddCategoryMutation();
 	const { data, isLoading } = useGetCategoryQuery();
 
 	const handleFormSubmit = (values, { resetForm }) => {
 		addProduct({ ...values });
 		resetForm();
-	};
-
-	const handleCategoryName = () => {
-		addCategory({ name: categoryName });
-		setCategoryName('');
 	};
 
 	return (
@@ -65,35 +53,6 @@ const AddProduct = () => {
 					title="Add Product"
 					subtitle="Create a new Product in your Inventory"
 				/>
-
-				<Accordion sx={{ backgroundColor: theme.palette.secondary[700] }}>
-					<AccordionSummary>
-						<Box>
-							<Typography>Add A New Product Category</Typography>
-						</Box>
-					</AccordionSummary>
-					<AccordionDetails>
-						<TextField
-							value={categoryName}
-							fullWidth
-							variant="filled"
-							type="text"
-							label="Category Name"
-							sx={{ gridColumn: 'span 2' }}
-							onChange={(e) => setCategoryName(e.target.value)}
-						/>
-					</AccordionDetails>
-					<AccordionActions>
-						<Button
-							variant="primary"
-							size="small"
-							onClick={() => handleCategoryName()}
-							fullWidth={true}
-						>
-							<AddCircleIcon />
-						</Button>
-					</AccordionActions>
-				</Accordion>
 			</FlexBetween>
 
 			<Formik

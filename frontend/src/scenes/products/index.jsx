@@ -404,7 +404,7 @@ const FilterInput = ({ onSelect }) => {
 	const [filterValue, setFilterValue] = useState(' ');
 
 	useEffect(() => {
-		if (filterField && filterValue)
+		if (filterField)
 			onSelect({
 				field: filterField.toLowerCase(),
 				value: filterValue.toLowerCase(),
@@ -431,7 +431,7 @@ const FilterInput = ({ onSelect }) => {
 					}
 				}}
 				renderInput={(params) => <TextField {...params} label="Filter By" />}
-				sx={{ gridColumn: 'span 3', borderRight: 2 }}
+				sx={{ gridColumn: 'span 2', borderRight: 2 }}
 			/>
 			<TextField
 				value={filterValue}

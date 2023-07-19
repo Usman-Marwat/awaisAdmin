@@ -1,6 +1,7 @@
 import React from 'react';
 import {
 	Box,
+	Collapse,
 	Divider,
 	Drawer,
 	IconButton,
@@ -27,6 +28,10 @@ import {
 	AdminPanelSettingsOutlined,
 	TrendingUpOutlined,
 	PieChartOutlined,
+	ExpandMore,
+	ExpandLess,
+	AddCircle,
+	Category,
 } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -155,7 +160,36 @@ const Sidebar = ({
 										</Typography>
 									);
 								}
+
 								const lcText = text.toLowerCase();
+
+								if (text === 'Products')
+									return (
+										<ProductListItem
+											key={text}
+											onActive={() => setActive(lcText)}
+											onAddProductNavigate={() => navigate(`/addproduct`)}
+											onListNavigate={() => navigate('/products')}
+											onCategoriesNavigate={() => navigate('/categories')}
+											sxButton={{
+												backgroundColor:
+													active === lcText
+														? theme.palette.secondary[300]
+														: 'transparent',
+												color:
+													active === lcText
+														? theme.palette.primary[600]
+														: theme.palette.secondary[100],
+											}}
+											sxIcon={{
+												ml: '2rem',
+												color:
+													active === lcText
+														? theme.palette.primary[600]
+														: theme.palette.secondary[200],
+											}}
+										/>
+									);
 
 								return (
 									<ListItem key={text} disablePadding>
@@ -235,6 +269,60 @@ const Sidebar = ({
 				</Drawer>
 			)}
 		</Box>
+	);
+};
+
+const ProductListItem = ({
+	sxButton,
+	sxIcon,
+	onActive,
+	onAddProductNavigate,
+	onListNavigate,
+	onCategoriesNavigate,
+}) => {
+	const [open, setOpen] = useState(true);
+
+	return (
+		<>
+			<ListItemButton
+				onClick={() => {
+					setOpen(!open);
+					onActive();
+				}}
+				sx={sxButton}
+			>
+				<ListItemIcon sx={sxIcon}>
+					<ShoppingCartOutlined />
+				</ListItemIcon>
+				<ListItemText primary="Prod-Cats" />
+				{open ? <ExpandLess /> : <ExpandMore />}
+			</ListItemButton>
+
+			<Collapse in={open} timeout="auto" unmountOnExit>
+				<List component="div" disablePadding>
+					<ListItemButton sx={sxButton} onClick={onListNavigate}>
+						<ListItemIcon sx={sxIcon}>
+							<TodayOutlined />
+						</ListItemIcon>
+						<ListItemText primary="Product List" />
+					</ListItemButton>
+
+					<ListItemButton sx={sxButton} onClick={onAddProductNavigate}>
+						<ListItemIcon sx={sxIcon}>
+							<AddCircle />
+						</ListItemIcon>
+						<ListItemText primary="Add Product" />
+					</ListItemButton>
+
+					<ListItemButton sx={sxButton} onClick={onCategoriesNavigate}>
+						<ListItemIcon sx={sxIcon}>
+							<Category />
+						</ListItemIcon>
+						<ListItemText primary="Categories" />
+					</ListItemButton>
+				</List>
+			</Collapse>
+		</>
 	);
 };
 
