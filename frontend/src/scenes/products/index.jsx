@@ -12,10 +12,6 @@ import {
 	useMediaQuery,
 	TextField,
 	Autocomplete,
-	ButtonGroup,
-	FormControl,
-	InputLabel,
-	Select,
 } from '@mui/material';
 import { AddCircle, DeleteOutline } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -34,6 +30,7 @@ import {
 	useGetCategoryQuery,
 } from '../../state/api';
 import FlexBetween from '../../components/FlexBetween';
+import ImageSlider from '../../components/ImageSlider';
 
 const Products = () => {
 	const theme = useTheme();
@@ -198,6 +195,8 @@ const Product = ({ item, onSelect, categoriesNames }) => {
 			}}
 		>
 			<CardContent>
+				<ImageSlider />
+
 				<Typography
 					sx={{ fontSize: 14 }}
 					color={theme.palette.secondary[700]}

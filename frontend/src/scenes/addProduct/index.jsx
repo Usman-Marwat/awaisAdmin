@@ -16,14 +16,9 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import {
-	useAddCategoryMutation,
-	useAddProductMutation,
-	useGetCategoryQuery,
-} from '../../state/api';
+import { useAddProductMutation, useGetCategoryQuery } from '../../state/api';
 import Header from '../../components/Header';
 import FlexBetween from '../../components/FlexBetween';
-import { useState } from 'react';
 
 const animatedComponents = makeAnimated();
 const colourOptions = [
