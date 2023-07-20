@@ -1,6 +1,8 @@
 import {
+	Alert,
 	Box,
 	Button,
+	Chip,
 	FormControl,
 	InputLabel,
 	MenuItem,
@@ -9,6 +11,7 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 import MultiSelect from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { useFilePicker } from 'use-file-picker';
@@ -18,6 +21,7 @@ import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
+import _ from 'lodash';
 
 import { useAddProductMutation, useGetCategoryQuery } from '../../state/api';
 import Header from '../../components/Header';
@@ -40,6 +44,9 @@ const AddProduct = () => {
 	const [addProduct] = useAddProductMutation();
 	const { data, isLoading } = useGetCategoryQuery();
 	const [images, setImages] = useState([]);
+	const [attributes, setAttributes] = useState([
+		{ key: 'color', values: ['red', 'green'] },
+	]);
 	const [openFileSelector, { filesContent, loading }] = useFilePicker({
 		readAs: 'DataURL',
 		accept: 'image/*',
@@ -207,10 +214,139 @@ const AddProduct = () => {
 								color={theme.palette.secondary[300]}
 								sx={{ gridColumn: 'span 4', marginTop: 2 }}
 							>
-								Attributes
+								Product Attributes
 							</Typography>
 
-							<Box sx={{ gridColumn: 'span 2' }}>
+							<Box>
+								{attributes?.map((att) => (
+									<Box
+										key={att.key}
+										display="flex"
+										alignItems="center"
+										marginTop={1}
+									>
+										<Typography marginRight={2}>
+											{att.key.toUpperCase()}:{' '}
+										</Typography>
+										<Box display="flex" columnGap="1.33%">
+											{att.values.map((val, i) => (
+												<Chip
+													key={i}
+													label={val}
+													onDelete={() => {
+														setAttributes(
+															attributes.map((a) => {
+																if (a.key == att.key)
+																	return {
+																		...a,
+																		values: a.values.filter((v) => v !== val),
+																	};
+																return a;
+															})
+														);
+													}}
+												/>
+											))}
+										</Box>
+									</Box>
+								))}
+							</Box>
+
+							<Box sx={{ gridColumn: 'span 4' }}>
+								<AttributesInput
+									attributes={attributes}
+									onAdd={(attributes) => setAttributes(attributes)}
+									onAppend={(key, value) => {
+										setAttributes(
+											attributes.map((attribute) => {
+												if (attribute.key === key)
+													return {
+														...attribute,
+														values: [...attribute.values, value],
+													};
+												return attribute;
+											})
+										);
+									}}
+								/>
+							</Box>
+						</Box>
+
+						<Box display="flex" justifyContent="center" mt="20px">
+							<Button type="submit" color="secondary" variant="contained">
+								Add Product
+							</Button>
+						</Box>
+					</form>
+				)}
+			</Formik>
+		</Box>
+	);
+};
+
+const AttributesInput = ({ attributes = [], onAppend, onAdd }) => {
+	const [key, setKey] = useState('');
+	const [value, setValue] = useState('');
+
+	const handleAdd = () => {
+		if (!key) return alert('Please enter Attribute Name');
+		const found = _.find(
+			attributes,
+			(attribute) => attribute.key.toLowerCase() === key.toLocaleLowerCase()
+		);
+
+		if (found) {
+			if (found.values.includes(value)) return alert('Already added');
+			return onAppend(key.toLocaleLowerCase(), value);
+		}
+
+		if (!value) return alert('Please enter Attribue Value');
+
+		onAdd([...attributes, { key: key.toLocaleLowerCase(), values: [value] }]);
+	};
+
+	return (
+		<Box display="flex" columnGap="1.33%">
+			<TextField
+				variant="filled"
+				type="text"
+				label="Attribute Name"
+				onChange={(e) => setKey(e.target.value)}
+				value={key}
+			/>
+			<TextField
+				variant="filled"
+				type="text"
+				label="Attribute Value"
+				onChange={(e) => setValue(e.target.value)}
+				value={value}
+			/>
+			<Button onClick={handleAdd}>
+				<SendIcon />
+			</Button>
+		</Box>
+	);
+};
+
+const checkoutSchema = yup.object().shape({
+	name: yup.string().required('required'),
+	price: yup.string().required('required'),
+	description: yup.string().required('required'),
+	category: yup.string().required('required'),
+	supply: yup.string().required('required'),
+});
+const initialValues = {
+	name: '',
+	price: '',
+	description: '',
+	category: '',
+	supply: '',
+};
+
+export default AddProduct;
+
+/*
+<Box sx={{ gridColumn: 'span 2' }}>
 								<MultiSelect
 									styles={{
 										menu: (baseStyles, state) => ({
@@ -245,33 +381,4 @@ const AddProduct = () => {
 									placeholder="choose sizes"
 								/>
 							</Box>
-						</Box>
-
-						<Box display="flex" justifyContent="center" mt="20px">
-							<Button type="submit" color="secondary" variant="contained">
-								Add Product
-							</Button>
-						</Box>
-					</form>
-				)}
-			</Formik>
-		</Box>
-	);
-};
-
-const checkoutSchema = yup.object().shape({
-	name: yup.string().required('required'),
-	price: yup.string().required('required'),
-	description: yup.string().required('required'),
-	category: yup.string().required('required'),
-	supply: yup.string().required('required'),
-});
-const initialValues = {
-	name: '',
-	price: '',
-	description: '',
-	category: '',
-	supply: '',
-};
-
-export default AddProduct;
+*/
