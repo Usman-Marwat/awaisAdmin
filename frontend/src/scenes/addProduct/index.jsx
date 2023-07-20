@@ -11,14 +11,18 @@ import {
 } from '@mui/material';
 import MultiSelect from 'react-select';
 import makeAnimated from 'react-select/animated';
-
+import { useFilePicker } from 'use-file-picker';
+import CameraIcon from '@mui/icons-material/CameraEnhance';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
+import 'react-horizontal-scrolling-menu/dist/styles.css';
 
 import { useAddProductMutation, useGetCategoryQuery } from '../../state/api';
 import Header from '../../components/Header';
 import FlexBetween from '../../components/FlexBetween';
+import { useEffect, useState } from 'react';
 
 const animatedComponents = makeAnimated();
 const colourOptions = [
@@ -35,6 +39,15 @@ const AddProduct = () => {
 	const isNonMobile = useMediaQuery('(min-width:600px)');
 	const [addProduct] = useAddProductMutation();
 	const { data, isLoading } = useGetCategoryQuery();
+	const [images, setImages] = useState([]);
+	const [openFileSelector, { filesContent, loading }] = useFilePicker({
+		readAs: 'DataURL',
+		accept: 'image/*',
+		multiple: true,
+		onFilesSuccessfulySelected: ({ plainFiles, filesContent }) => {
+			setImages([...images, ...filesContent]);
+		},
+	});
 
 	const handleFormSubmit = (values, { resetForm }) => {
 		addProduct({ ...values });
@@ -73,6 +86,34 @@ const AddProduct = () => {
 								'& > div': { gridColumn: isNonMobile ? undefined : 'span 4' },
 							}}
 						>
+							<Box alignItems="center" sx={{ gridColumn: 'span 2' }}>
+								<ScrollMenu>
+									{images.map((file, index) => (
+										<Button
+											key={index}
+											onClick={() =>
+												setImages((prevImages) =>
+													prevImages.filter((img) => img.path !== file.path)
+												)
+											}
+										>
+											<Box
+												sx={{ width: 120, height: 120, borderRadius: 2 }}
+												component="img"
+												alt={file.name}
+												src={file.content}
+											/>
+										</Button>
+									))}
+									<Button color="secondary" onClick={() => openFileSelector()}>
+										<CameraIcon
+											sx={{ width: 120, height: 120, borderRadius: 2 }}
+										/>
+									</Button>
+								</ScrollMenu>
+							</Box>
+							<Box sx={{ gridColumn: 'span 2' }} />
+
 							<TextField
 								fullWidth
 								variant="filled"
@@ -86,7 +127,7 @@ const AddProduct = () => {
 								helperText={touched.name && errors.name}
 								sx={{ gridColumn: 'span 2' }}
 							/>
-							<FormControl fullWidth>
+							<FormControl fullWidth sx={{ gridColumn: 'span 2' }}>
 								<InputLabel id="demo-simple-select-label">Category</InputLabel>
 								<Select
 									labelId="demo-simple-select-label"
@@ -98,7 +139,6 @@ const AddProduct = () => {
 									label="category"
 									onChange={handleChange}
 									value={values.category}
-									sx={{ gridColumn: 'span 2' }}
 								>
 									{data?.map((category, i) => (
 										<MenuItem value={category.name} key={i}>
@@ -206,7 +246,8 @@ const AddProduct = () => {
 								/>
 							</Box>
 						</Box>
-						<Box display="flex" justifyContent="end" mt="20px">
+
+						<Box display="flex" justifyContent="center" mt="20px">
 							<Button type="submit" color="secondary" variant="contained">
 								Add Product
 							</Button>

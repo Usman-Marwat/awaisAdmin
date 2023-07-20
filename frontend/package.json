@@ -29,11 +29,13 @@
     "react": "^18.2.0",
     "react-datepicker": "^4.15.0",
     "react-dom": "^18.2.0",
+    "react-horizontal-scrolling-menu": "^4.1.0",
     "react-i18next": "^13.0.1",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.4.3",
     "react-select": "^5.7.4",
     "react-slideshow-image": "^4.2.1",
+    "use-file-picker": "^1.7.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {
