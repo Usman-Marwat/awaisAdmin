@@ -129,7 +129,25 @@ const Products = () => {
 				</Box> */}
 
 				<Box sx={{ gridColumn: 'span 2' }}>
-					<FilterInput onSelect={filterData} />
+					<Box>
+						<Autocomplete
+							disablePortal
+							id="combo-box-demo"
+							options={['Category', 'Supply']}
+							onClose={(e) => {
+								const text = e.target.outerText.toString();
+								text &&
+									setFinalData(
+										_.sortBy(finalData, [
+											(p) => p[text.toLowerCase()].toLowerCase(),
+										])
+									);
+							}}
+							renderInput={(params) => (
+								<TextField {...params} label="Sort By" />
+							)}
+						/>
+					</Box>
 				</Box>
 				<Box sx={{ gridColumn: 'span 2' }}>
 					<PriceInput
@@ -155,24 +173,6 @@ const Products = () => {
 						}}
 					/>
 				</Box>
-
-				{/* <Box>
-					<Autocomplete
-						disablePortal
-						id="combo-box-demo"
-						options={['Category', 'Price', 'Supply']}
-						onClose={(e) => {
-							const text = e.target.outerText.toString();
-							text &&
-								setFinalData(
-									_.sortBy(finalData, [
-										(p) => p[text.toLowerCase()].toLowerCase(),
-									])
-								);
-						}}
-						renderInput={(params) => <TextField {...params} label="Sort By" />}
-					/>
-				</Box> */}
 			</Box>
 
 			{data || !isLoading ? (
