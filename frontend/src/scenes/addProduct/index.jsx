@@ -57,7 +57,7 @@ const AddProduct = () => {
 	});
 
 	const handleFormSubmit = (values, { resetForm }) => {
-		addProduct({ ...values });
+		addProduct({ ...values, attributes });
 		resetForm();
 	};
 

@@ -12,8 +12,11 @@ import {
 	useMediaQuery,
 	TextField,
 	Autocomplete,
+	Chip,
 } from '@mui/material';
 import { AddCircle, DeleteOutline } from '@mui/icons-material';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
@@ -125,11 +128,35 @@ const Products = () => {
 					</ButtonGroup>
 				</Box> */}
 
-				<Box sx={{ gridColumn: 'span 4' }}>
+				<Box sx={{ gridColumn: 'span 2' }}>
 					<FilterInput onSelect={filterData} />
 				</Box>
+				<Box sx={{ gridColumn: 'span 2' }}>
+					<PriceInput
+						onPriceFilter={(min, max) => {
+							if (Number(min) && Number(max))
+								return setFinalData(
+									data.filter(
+										(product) =>
+											Number(product.price) > Number(min) &&
+											Number(product.price) < Number(max)
+									)
+								);
 
-				<Box>
+							if (Number(min) && !Number(max))
+								return setFinalData(
+									data.filter((product) => Number(product.price) > Number(min))
+								);
+							if (!Number(min) && Number(max))
+								return setFinalData(
+									data.filter((product) => Number(product.price) < Number(max))
+								);
+							if (!Number(min) && !Number(max)) return setFinalData(data);
+						}}
+					/>
+				</Box>
+
+				{/* <Box>
 					<Autocomplete
 						disablePortal
 						id="combo-box-demo"
@@ -145,7 +172,7 @@ const Products = () => {
 						}}
 						renderInput={(params) => <TextField {...params} label="Sort By" />}
 					/>
-				</Box>
+				</Box> */}
 			</Box>
 
 			{data || !isLoading ? (
@@ -243,6 +270,26 @@ const Product = ({ item, onSelect, categoriesNames }) => {
 					<Typography>
 						Yearly Units Sold This Year: {item.stat.yearlyTotalSoldUnits}
 					</Typography>
+
+					<Box>
+						{item?.attributes?.map((att) => (
+							<Box
+								key={att.key}
+								display="flex"
+								alignItems="center"
+								marginTop={1}
+							>
+								<Typography marginRight={2}>
+									{att.key.toUpperCase()}:{' '}
+								</Typography>
+								<Box display="flex" columnGap="1.33%">
+									{att.values.map((val, i) => (
+										<Chip key={i} label={val} />
+									))}
+								</Box>
+							</Box>
+						))}
+					</Box>
 
 					<Box sx={styles.couponBox}>
 						<TextField
@@ -424,14 +471,12 @@ const FilterInput = ({ onSelect }) => {
 		<Box
 			display="grid"
 			gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-			justifyContent="space-between"
 			rowGap="20px"
-			flex={1}
 		>
 			<Autocomplete
 				disablePortal
 				id="combo-box-demo"
-				options={['Category', 'Price', 'Supply']}
+				options={['Category', 'Supply']}
 				onClose={(e) => {
 					const text = e.target.outerText.toString();
 					if (text) {
@@ -440,7 +485,7 @@ const FilterInput = ({ onSelect }) => {
 					}
 				}}
 				renderInput={(params) => <TextField {...params} label="Filter By" />}
-				sx={{ gridColumn: 'span 2', borderRight: 2 }}
+				sx={{ gridColumn: 'span 3', borderRight: 2 }}
 			/>
 			<TextField
 				value={filterValue}
@@ -448,8 +493,46 @@ const FilterInput = ({ onSelect }) => {
 				id="outlined-basic"
 				label="Value"
 				variant="outlined"
-				sx={{ marginLeft: -0.5, borderLeft: 2 }}
+				sx={{ marginLeft: -0.5, borderLeft: 2, gridColumn: 'span 1' }}
 			/>
+		</Box>
+	);
+};
+
+const PriceInput = ({ onPriceFilter }) => {
+	const [min, setMin] = useState('');
+	const [max, setMax] = useState('');
+
+	const handleClick = () => {
+		if (min && max)
+			if (Number(min) >= Number(max))
+				return alert('Max value should be greater');
+
+		onPriceFilter(min, max);
+	};
+
+	return (
+		<Box display="flex" columnGap="1.33%" alignItems="center">
+			<Typography>Price Range: </Typography>
+			<TextField
+				sx={{ flex: 1 }}
+				variant="filled"
+				type="text"
+				label="Min Price"
+				onChange={(e) => setMin(e.target.value)}
+				value={min}
+			/>
+			<TextField
+				sx={{ flex: 1 }}
+				variant="filled"
+				type="text"
+				label="Max Price"
+				onChange={(e) => setMax(e.target.value)}
+				value={max}
+			/>
+			<Button onClick={handleClick}>
+				<SendIcon />
+			</Button>
 		</Box>
 	);
 };
