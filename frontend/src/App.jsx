@@ -19,6 +19,7 @@ import Admin from './scenes/admin';
 import Performance from './scenes/performance';
 import AddProduct from './scenes/addProduct';
 import Categories from './scenes/categories';
+import Reports from './scenes/reports';
 
 function App() {
 	const mode = useSelector((state) => state.global.mode);
@@ -37,6 +38,7 @@ function App() {
 							<Route path="/products" element={<Products />} />
 							<Route path="/customers" element={<Customers />} />
 							<Route path="/transactions" element={<Transactions />} />
+							<Route path="/reports" element={<Reports />} />
 							<Route path="/geography" element={<Geography />} />
 							<Route path="/overview" element={<Overview />} />
 							<Route path="/daily" element={<Daily />} />
