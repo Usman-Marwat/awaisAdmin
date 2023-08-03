@@ -89,8 +89,8 @@ app.post('/create-checkout-session', async (req, res) => {
 					quantity: item.quantity,
 				};
 			}),
-			success_url: `hussnain-admin.vercel.app/success`,
-			cancel_url: `hussnain-admin.vercel.app/cancel`,
+			success_url: `https://hussnain-admin.vercel.app/success`,
+			cancel_url: `https://hussnain-admin.vercel.app/cancel`,
 		});
 		res.json({ url: session.url });
 	} catch (e) {
