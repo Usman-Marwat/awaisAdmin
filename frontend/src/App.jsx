@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createTheme } from '@mui/material/styles';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Box, CssBaseline, ThemeProvider, Typography } from '@mui/material';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { themeSettings } from './theme';
@@ -48,6 +48,47 @@ function App() {
 							<Route path="/performance" element={<Performance />} />
 							<Route path="/addproduct" element={<AddProduct />} />
 							<Route path="/categories" element={<Categories />} />
+							<Route
+								path="/success"
+								element={
+									<Box
+										display="flex"
+										flexDirection="column"
+										justifyContent="center"
+										alignItems="center"
+										border={1}
+										borderRadius={5}
+									>
+										<Typography fontSize={43}>Success </Typography>
+										<Typography fontSize={22}>
+											Congradulation! Your payment was successfully made, and
+											your payment-card-secret was directly send to stripe.
+										</Typography>
+										<Typography fontSize={22}>
+											Only the settlement history was saved to the backend
+											database as shown below as well.
+										</Typography>
+									</Box>
+								}
+							/>
+							<Route
+								path="/cancel"
+								element={
+									<Box
+										display="flex"
+										flexDirection="column"
+										justifyContent="center"
+										alignItems="center"
+										border={1}
+										borderRadius={5}
+									>
+										<Typography fontSize={43}>Cancel </Typography>
+										<Typography fontSize={22}>
+											Sorry! Your payment was unsucssesfull
+										</Typography>
+									</Box>
+								}
+							/>
 						</Route>
 					</Routes>
 				</ThemeProvider>

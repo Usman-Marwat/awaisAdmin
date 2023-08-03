@@ -115,6 +115,13 @@ export const api = createApi({
 			}),
 			invalidatesTags: ['Categories'],
 		}),
+		checkOut: build.mutation({
+			query: (items) => ({
+				url: '/create-checkout-session',
+				method: 'POST',
+				body: items,
+			}),
+		}),
 	}),
 });
 
@@ -137,4 +144,5 @@ export const {
 	useDeleteCategoryMutation,
 	useEditCategoryMutation,
 	useDeleteAdminMutation,
+	useCheckOutMutation,
 } = api;

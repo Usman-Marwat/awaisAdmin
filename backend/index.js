@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import Stripe from 'stripe';
 
 import clientRoutes from './routes/client.js';
 import generalRoutes from './routes/general.js';
@@ -29,6 +30,74 @@ app.use('/general', generalRoutes);
 app.use('/management', managementRoutes);
 app.use('/sales', salesRoutes);
 app.use('/product', productRoutes);
+
+app.use(express.static('public'));
+
+var allowCrossDomain = function (req, res, next) {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+	res.header('Access-Control-Allow-Headers', 'Content-Type');
+	next();
+};
+app.use(allowCrossDomain);
+
+const stripe = new Stripe(process.env.STRIPE_KEY);
+
+app.post('/checkout', async (req, res) => {
+	const items = req.body.items;
+	let lineItems = [];
+	items.forEach((item) => {
+		lineItems.push({
+			price: item.id,
+			quantity: item.quantity,
+		});
+	});
+
+	const session = await stripe.checkout.sessions.create({
+		line_items: lineItems,
+		mode: 'payment',
+		success_url: 'http://localhost:5001/success',
+		cancel_url: 'http://localhost:5001/cancel',
+	});
+
+	res.send(
+		JSON.stringify({
+			url: session.url,
+		})
+	);
+});
+
+const storeItems = new Map([
+	[1, { priceInCents: 10000, name: 'In House Product' }],
+	[2, { priceInCents: 20000, name: 'Vendor sale product' }],
+]);
+app.post('/create-checkout-session', async (req, res) => {
+	try {
+		const session = await stripe.checkout.sessions.create({
+			payment_method_types: ['card'],
+			mode: 'payment',
+			line_items: req.body.items.map((item) => {
+				const storeItem = storeItems.get(item.id);
+				return {
+					price_data: {
+						currency: 'usd',
+						product_data: {
+							name: storeItem.name,
+						},
+						unit_amount: storeItem.priceInCents,
+					},
+					quantity: item.quantity,
+				};
+			}),
+			success_url: `hussnain-admin.vercel.app/success`,
+			cancel_url: `hussnain-admin.vercel.app/cancel`,
+		});
+		res.json({ url: session.url });
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ error: e.message });
+	}
+});
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
