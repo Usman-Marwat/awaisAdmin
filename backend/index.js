@@ -56,8 +56,10 @@ app.post('/checkout', async (req, res) => {
 	const session = await stripe.checkout.sessions.create({
 		line_items: lineItems,
 		mode: 'payment',
-		success_url: 'http://localhost:5001/success',
-		cancel_url: 'http://localhost:5001/cancel',
+		// success_url: 'http://localhost:5001/success',
+		// cancel_url: 'http://localhost:5001/cancel',
+		success_url: `https://hussnain-admin.vercel.app/success`,
+		cancel_url: `https://hussnain-admin.vercel.app/cancel`,
 	});
 
 	res.send(
@@ -89,8 +91,8 @@ app.post('/create-checkout-session', async (req, res) => {
 					quantity: item.quantity,
 				};
 			}),
-			success_url: `https://hussnain-admin.vercel.app/success`,
-			cancel_url: `https://hussnain-admin.vercel.app/cancel`,
+			success_url: `http://127.0.0.1:5173/success`,
+			cancel_url: `http://127.0.0.1:5173/cancel`,
 		});
 		res.json({ url: session.url });
 	} catch (e) {

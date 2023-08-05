@@ -18,6 +18,9 @@ import {
 import Header from '../../components/Header';
 import { ProductSalesData, productCategories } from '../../data';
 import { useCheckOutMutation } from '../../state/api';
+import commisionReport from '../../data/commisionReport';
+import walletRecharge from '../../data/walletRecharge';
+import wishlistDataset from '../../data/wishlistDataset';
 
 // const data = ProductSalesData;
 const categories = ['All', ...productCategories];
@@ -93,67 +96,72 @@ const Reports = () => {
 	};
 
 	return (
-		<Box m="1.5rem 2.5rem">
-			<Header title="REPORTS" subtitle="All Sales Reports" />
+		<>
+			<Box m="1.5rem 2.5rem">
+				<Header title="REPORTS" subtitle="All Sales Reports" />
 
-			<Box sx={{ marginTop: 1 }}>
-				<Button
-					type="submit"
-					color="secondary"
-					variant="contained"
-					onClick={handleCheckOut}
-				>
-					<Typography mr="0.7rem">CheckOut</Typography>
-				</Button>
-			</Box>
+				<Box sx={{ marginTop: 1 }}>
+					<Button
+						type="submit"
+						color="secondary"
+						variant="contained"
+						onClick={handleCheckOut}
+					>
+						<Typography mr="0.7rem">CheckOut</Typography>
+					</Button>
+				</Box>
 
-			<Box
-				height="80vh"
-				sx={{
-					'& .MuiDataGrid-root': {
-						border: 'none',
-					},
-					'& .MuiDataGrid-cell': {
-						borderBottom: 'none',
-					},
-					'& .MuiDataGrid-columnHeaders': {
-						backgroundColor: theme.palette.background.alt,
-						color: theme.palette.secondary[100],
-						borderBottom: 'none',
-					},
-					'& .MuiDataGrid-virtualScroller': {
-						backgroundColor: theme.palette.primary.light,
-					},
-					'& .MuiDataGrid-footerContainer': {
-						backgroundColor: theme.palette.background.alt,
-						color: theme.palette.secondary[100],
-						borderTop: 'none',
-					},
-					'& .MuiDataGrid-toolbarContainer .MuiButton-text': {
-						color: `${theme.palette.secondary[200]} !important`,
-					},
-				}}
-			>
-				<DataGrid
-					loading={false}
-					getRowId={(row) => row.Order_ID}
-					rows={data}
-					columns={columns}
-					rowCount={(data && data.length) || 0}
-					rowsPerPageOptions={[20, 50, 100]}
-					pagination
-					page={page}
-					pageSize={pageSize}
-					sortingMode="server"
-					onPageChange={(newPage) => setPage(newPage)}
-					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-					components={{ Toolbar: DataGridCustomToolbar }}
-					componentsProps={{
-						toolbar: { category, onValueChange },
+				<Box
+					height="80vh"
+					sx={{
+						'& .MuiDataGrid-root': {
+							border: 'none',
+						},
+						'& .MuiDataGrid-cell': {
+							borderBottom: 'none',
+						},
+						'& .MuiDataGrid-columnHeaders': {
+							backgroundColor: theme.palette.background.alt,
+							color: theme.palette.secondary[100],
+							borderBottom: 'none',
+						},
+						'& .MuiDataGrid-virtualScroller': {
+							backgroundColor: theme.palette.primary.light,
+						},
+						'& .MuiDataGrid-footerContainer': {
+							backgroundColor: theme.palette.background.alt,
+							color: theme.palette.secondary[100],
+							borderTop: 'none',
+						},
+						'& .MuiDataGrid-toolbarContainer .MuiButton-text': {
+							color: `${theme.palette.secondary[200]} !important`,
+						},
 					}}
-				/>
+				>
+					<DataGrid
+						loading={false}
+						getRowId={(row) => row.Order_ID}
+						rows={data}
+						columns={columns}
+						rowCount={(data && data.length) || 0}
+						rowsPerPageOptions={[20, 50, 100]}
+						pagination
+						page={page}
+						pageSize={pageSize}
+						sortingMode="server"
+						onPageChange={(newPage) => setPage(newPage)}
+						onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+						components={{ Toolbar: DataGridCustomToolbar }}
+						componentsProps={{
+							toolbar: { category, onValueChange },
+						}}
+					/>
+				</Box>
 			</Box>
-		</Box>
+			<CommissionReport />
+			<WalletRecharge />
+			<WhishList />
+		</>
 	);
 };
 
@@ -184,5 +192,299 @@ const DataGridCustomToolbar = ({ category, onValueChange }) => {
 				<GridToolbarExport />
 			</Box>
 		</GridToolbarContainer>
+	);
+};
+
+const CommissionReport = () => {
+	const theme = useTheme();
+	const [page, setPage] = useState(0);
+	const [data, setData] = useState(commisionReport);
+	const [pageSize, setPageSize] = useState(20);
+	const [category, setCategory] = useState('All');
+
+	const onValueChange = () => {};
+
+	const columns = [
+		{
+			field: 'id',
+			headerName: 'Customer Number',
+			flex: 1,
+		},
+		{
+			field: 'Date',
+			headerName: 'Date',
+			flex: 1,
+		},
+		{
+			field: 'Sales',
+			headerName: 'Amount',
+			flex: 1,
+		},
+	];
+
+	const ToolBarHead = () => (
+		<GridToolbarContainer>
+			<Box display="flex" flex={1} padding="2% 30%" columnGap={3}>
+				<Box display="flex">
+					<Header title="Commision Report" />
+				</Box>
+				<GridToolbarExport />
+			</Box>
+		</GridToolbarContainer>
+	);
+
+	return (
+		<Box marginTop={10}>
+			<Box
+				height="80vh"
+				sx={{
+					'& .MuiDataGrid-root': {
+						border: 'none',
+					},
+					'& .MuiDataGrid-cell': {
+						borderBottom: 'none',
+					},
+					'& .MuiDataGrid-columnHeaders': {
+						backgroundColor: theme.palette.background.alt,
+						color: theme.palette.secondary[100],
+						borderBottom: 'none',
+					},
+					'& .MuiDataGrid-virtualScroller': {
+						backgroundColor: theme.palette.primary.light,
+					},
+					'& .MuiDataGrid-footerContainer': {
+						backgroundColor: theme.palette.background.alt,
+						color: theme.palette.secondary[100],
+						borderTop: 'none',
+					},
+					'& .MuiDataGrid-toolbarContainer .MuiButton-text': {
+						color: `${theme.palette.secondary[200]} !important`,
+					},
+				}}
+			>
+				<DataGrid
+					loading={false}
+					getRowId={(row) => Math.random()}
+					rows={data}
+					columns={columns}
+					rowCount={(data && data.length) || 0}
+					rowsPerPageOptions={[20, 50, 100]}
+					pagination
+					page={page}
+					pageSize={pageSize}
+					sortingMode="server"
+					onPageChange={(newPage) => setPage(newPage)}
+					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+					components={{ Toolbar: ToolBarHead }}
+					componentsProps={{
+						toolbar: { category, onValueChange },
+					}}
+				/>
+			</Box>
+		</Box>
+	);
+};
+const WalletRecharge = () => {
+	const theme = useTheme();
+	const [page, setPage] = useState(0);
+	const [data, setData] = useState(walletRecharge);
+	const [pageSize, setPageSize] = useState(20);
+	const [category, setCategory] = useState('All');
+
+	const onValueChange = () => {};
+
+	const columns = [
+		{
+			field: 'Attrition_Flag',
+			headerName: 'Attrition Flag',
+			flex: 1,
+		},
+		{
+			field: 'Income_Category',
+			headerName: 'Income Category',
+			flex: 1,
+		},
+		{
+			field: 'Card_Category',
+			headerName: 'Card Category',
+			flex: 1,
+		},
+		{
+			field: 'Credit_Limit',
+			headerName: 'Credit Limit',
+			flex: 1,
+		},
+		{
+			field: 'Total_Trans_Ct',
+			headerName: 'Total Transaction Count',
+			flex: 1,
+		},
+	];
+
+	const ToolBarHead = () => (
+		<GridToolbarContainer>
+			<Box display="flex" flex={1} padding="2% 30%" columnGap={3}>
+				<Box display="flex">
+					<Header title="Wallet Recharge" />
+				</Box>
+				<GridToolbarExport />
+			</Box>
+		</GridToolbarContainer>
+	);
+
+	return (
+		<Box marginTop={10}>
+			<Box
+				height="80vh"
+				sx={{
+					'& .MuiDataGrid-root': {
+						border: 'none',
+					},
+					'& .MuiDataGrid-cell': {
+						borderBottom: 'none',
+					},
+					'& .MuiDataGrid-columnHeaders': {
+						backgroundColor: theme.palette.background.alt,
+						color: theme.palette.secondary[100],
+						borderBottom: 'none',
+					},
+					'& .MuiDataGrid-virtualScroller': {
+						backgroundColor: theme.palette.primary.light,
+					},
+					'& .MuiDataGrid-footerContainer': {
+						backgroundColor: theme.palette.background.alt,
+						color: theme.palette.secondary[100],
+						borderTop: 'none',
+					},
+					'& .MuiDataGrid-toolbarContainer .MuiButton-text': {
+						color: `${theme.palette.secondary[200]} !important`,
+					},
+				}}
+			>
+				<DataGrid
+					loading={false}
+					getRowId={(row) => row.CLIENTNUM}
+					rows={data}
+					columns={columns}
+					rowCount={(data && data.length) || 0}
+					rowsPerPageOptions={[20, 50, 100]}
+					pagination
+					page={page}
+					pageSize={pageSize}
+					sortingMode="server"
+					onPageChange={(newPage) => setPage(newPage)}
+					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+					components={{ Toolbar: ToolBarHead }}
+					componentsProps={{
+						toolbar: { category, onValueChange },
+					}}
+				/>
+			</Box>
+		</Box>
+	);
+};
+
+const WhishList = () => {
+	const theme = useTheme();
+	const [page, setPage] = useState(0);
+	const [data, setData] = useState(wishlistDataset);
+	const [pageSize, setPageSize] = useState(20);
+	const [category, setCategory] = useState('All');
+
+	const onValueChange = () => {};
+
+	const columns = [
+		{
+			field: 'invoice_date',
+			headerName: 'Date Added',
+			flex: 1,
+		},
+		{
+			field: 'payment_method',
+			headerName: 'Desired Payment',
+			flex: 1,
+		},
+		{
+			field: 'category',
+			headerName: 'Product Category',
+			flex: 1,
+		},
+		{
+			field: 'price',
+			headerName: 'Price',
+			flex: 1,
+		},
+		{
+			field: 'quantity',
+			headerName: 'Quantity',
+			flex: 1,
+		},
+		{
+			field: 'shopping_mall',
+			headerName: 'Store Used',
+			flex: 1,
+		},
+	];
+
+	const ToolBarHead = () => (
+		<GridToolbarContainer>
+			<Box display="flex" flex={1} padding="2% 30%" columnGap={3}>
+				<Box display="flex">
+					<Header title="Customer WhisList" />
+				</Box>
+				<GridToolbarExport />
+			</Box>
+		</GridToolbarContainer>
+	);
+
+	return (
+		<Box marginTop={10}>
+			<Box
+				height="80vh"
+				sx={{
+					'& .MuiDataGrid-root': {
+						border: 'none',
+					},
+					'& .MuiDataGrid-cell': {
+						borderBottom: 'none',
+					},
+					'& .MuiDataGrid-columnHeaders': {
+						backgroundColor: theme.palette.background.alt,
+						color: theme.palette.secondary[100],
+						borderBottom: 'none',
+					},
+					'& .MuiDataGrid-virtualScroller': {
+						backgroundColor: theme.palette.primary.light,
+					},
+					'& .MuiDataGrid-footerContainer': {
+						backgroundColor: theme.palette.background.alt,
+						color: theme.palette.secondary[100],
+						borderTop: 'none',
+					},
+					'& .MuiDataGrid-toolbarContainer .MuiButton-text': {
+						color: `${theme.palette.secondary[200]} !important`,
+					},
+				}}
+			>
+				<DataGrid
+					loading={false}
+					getRowId={(row) => row.invoice_no}
+					rows={data}
+					columns={columns}
+					rowCount={(data && data.length) || 0}
+					rowsPerPageOptions={[20, 50, 100]}
+					pagination
+					page={page}
+					pageSize={pageSize}
+					sortingMode="server"
+					onPageChange={(newPage) => setPage(newPage)}
+					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+					components={{ Toolbar: ToolBarHead }}
+					componentsProps={{
+						toolbar: { category, onValueChange },
+					}}
+				/>
+			</Box>
+		</Box>
 	);
 };
