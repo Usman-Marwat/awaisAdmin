@@ -35,11 +35,10 @@ import {
 } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
-import '../i18n';
 import FlexBetween from './FlexBetween';
 import profileImage from '../assets/profile.jpeg';
+import Text from './Text';
 
 const navItems = [
 	{
@@ -115,7 +114,6 @@ const Sidebar = ({
 	const [active, setActive] = useState('');
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const { t, values } = useTranslation();
 
 	useEffect(() => {
 		setActive(pathname.substring(1));
@@ -144,10 +142,11 @@ const Sidebar = ({
 						<Box m="1.5rem 0rem 2rem 1rem">
 							<FlexBetween color={theme.palette.secondary.main}>
 								<Box display="flex" alignItems="center">
-									<Typography variant="h4" fontWeight="bold">
-										{t('panel')}
-									</Typography>
+									<Text variant="h4" fontWeight="bold">
+										Admin Panel
+									</Text>
 								</Box>
+
 								{!isNonMobile && (
 									<IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
 										<ChevronLeft />
@@ -159,9 +158,9 @@ const Sidebar = ({
 							{navItems.map(({ text, icon }) => {
 								if (!icon) {
 									return (
-										<Typography key={text} sx={{ m: '2.25rem 0 1rem 3rem' }}>
+										<Text key={text} sx={{ m: '2.25rem 0 1rem 3rem' }}>
 											{text}
-										</Typography>
+										</Text>
 									);
 								}
 
@@ -224,7 +223,7 @@ const Sidebar = ({
 											>
 												{icon}
 											</ListItemIcon>
-											<ListItemText primary={text} />
+											<ListItemText primary={<Text>{text}</Text>} />
 											{active === lcText && (
 												<ChevronRightOutlined sx={{ ml: 'auto' }} />
 											)}
@@ -298,7 +297,7 @@ const ProductListItem = ({
 				<ListItemIcon sx={sxIcon}>
 					<ShoppingCartOutlined />
 				</ListItemIcon>
-				<ListItemText primary="Products" />
+				<ListItemText primary={<Text>Products</Text>} />
 				{open ? <ExpandLess /> : <ExpandMore />}
 			</ListItemButton>
 
@@ -308,21 +307,21 @@ const ProductListItem = ({
 						<ListItemIcon sx={sxIcon}>
 							<TodayOutlined />
 						</ListItemIcon>
-						<ListItemText primary="Product List" />
+						<ListItemText primary={<Text>Product List</Text>} />
 					</ListItemButton>
 
 					<ListItemButton sx={sxButton} onClick={onAddProductNavigate}>
 						<ListItemIcon sx={sxIcon}>
 							<AddCircle />
 						</ListItemIcon>
-						<ListItemText primary="Add Product" />
+						<ListItemText primary={<Text>Add Product</Text>} />
 					</ListItemButton>
 
 					<ListItemButton sx={sxButton} onClick={onCategoriesNavigate}>
 						<ListItemIcon sx={sxIcon}>
 							<Category />
 						</ListItemIcon>
-						<ListItemText primary="Categories" />
+						<ListItemText primary={<Text>Categories</Text>} />
 					</ListItemButton>
 				</List>
 			</Collapse>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	LightModeOutlined,
 	DarkModeOutlined,
@@ -25,16 +25,43 @@ import {
 import FlexBetween from './FlexBetween';
 import { setMode } from '../state';
 import profileImage from '../assets/profile.jpeg';
+import { useSearchParams } from 'react-router-dom';
+
+const languages = [
+	'en',
+	'fr',
+	'ko',
+	'tr',
+	'fa',
+	'ar',
+	'zh',
+	'de',
+	'hi',
+	'it',
+	'bn',
+	'ms',
+	'sv',
+	'ur',
+];
 
 function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 	const isMobile = useMediaQuery('(max-width: 490px)');
 	const dispatch = useDispatch();
 	const theme = useTheme();
+	const [searchParams, setSearchParams] = useSearchParams();
 
 	const [anchorEl, setAnchorEl] = useState(null);
 	const isOpen = Boolean(anchorEl);
 	const handleClick = (event) => setAnchorEl(event.currentTarget);
-	const handleClose = () => setAnchorEl(null);
+	// const handleClose = () => setAnchorEl(null);
+	const handleClose = (locale) => {
+		setSearchParams({ lng: locale });
+		window.location.reload();
+	};
+
+	// useEffect(() => {
+	// 	window.location.reload();
+	// }, [searchParams]);
 
 	return (
 		<AppBar
@@ -124,7 +151,11 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 							onClose={handleClose}
 							anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 						>
-							<MenuItem onClick={handleClose}>Log Out</MenuItem>
+							{languages.map((locale) => (
+								<MenuItem key={locale} onClick={() => handleClose(locale)}>
+									{locale.toUpperCase()}
+								</MenuItem>
+							))}
 						</Menu>
 					</FlexBetween>
 				</FlexBetween>

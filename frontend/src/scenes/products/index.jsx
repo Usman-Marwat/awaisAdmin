@@ -15,7 +15,6 @@ import {
 	Chip,
 } from '@mui/material';
 import { AddCircle, DeleteOutline } from '@mui/icons-material';
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -34,6 +33,7 @@ import {
 } from '../../state/api';
 import FlexBetween from '../../components/FlexBetween';
 import ImageSlider from '../../components/ImageSlider';
+import Text from '../../components/Text';
 
 const Products = () => {
 	const theme = useTheme();
@@ -84,12 +84,11 @@ const Products = () => {
 
 	return (
 		<Box m="1.5rem 2.5rem">
-			<Header title="PRODUCTS" subtitle="See your list of products." />
+			<Header title="Products" subtitle="See your list of products" />
 			<Box sx={{ marginTop: 1 }}>
 				<Link to={'/addProduct'} style={{ textDecoration: 'none' }}>
 					<Button type="submit" color="secondary" variant="contained">
-						<Typography mr="0.7rem">Add Product</Typography>{' '}
-						<AddCircle color="white" />
+						<Text mr="0.7rem">Add Product</Text> <AddCircle color="white" />
 					</Button>
 				</Link>
 			</Box>

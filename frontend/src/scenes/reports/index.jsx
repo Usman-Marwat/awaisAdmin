@@ -22,6 +22,7 @@ import { useCheckOutMutation } from '../../state/api';
 import commisionReport from '../../data/commisionReport';
 import walletRecharge from '../../data/walletRecharge';
 import wishlistDataset from '../../data/wishlistDataset';
+import Text from '../../components/Text';
 
 const categories = ['All', ...productCategories];
 
@@ -97,7 +98,7 @@ const Reports = () => {
 
 	return (
 		<Box m="1.5rem 2rem">
-			<Header title="REPORTS" subtitle="All Sales Reports" />
+			<Header title="Reports" subtitle="All Sales Reports" />
 
 			<Box sx={{ marginTop: 1 }}>
 				<Button
@@ -213,14 +214,14 @@ const ToolBarHead = ({ text }) => {
 				padding="2%"
 				columnGap={3}
 			>
-				<Typography
+				<Text
 					variant="h5"
 					color={theme.palette.secondary[100]}
 					fontWeight="bold"
 					sx={{ mb: '5px' }}
 				>
 					{text}
-				</Typography>
+				</Text>
 				<GridToolbarExport />
 			</Box>
 		</GridToolbarContainer>
