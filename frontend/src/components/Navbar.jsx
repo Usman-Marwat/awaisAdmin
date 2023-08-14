@@ -28,20 +28,20 @@ import profileImage from '../assets/profile.jpeg';
 import { useSearchParams } from 'react-router-dom';
 
 const languages = [
-	'en',
-	'fr',
-	'ko',
-	'tr',
-	'fa',
-	'ar',
-	'zh',
-	'de',
-	'hi',
-	'it',
-	'bn',
-	'ms',
-	'sv',
-	'ur',
+	{ name: 'English', locale: 'en' },
+	{ name: 'French', locale: 'fr' },
+	{ name: 'Korean', locale: 'ko' },
+	{ name: 'Turkish', locale: 'tr' },
+	{ name: 'Persian', locale: 'fa' },
+	{ name: 'Arabic', locale: 'ar' },
+	{ name: 'Chinese', locale: 'zh' },
+	{ name: 'German', locale: 'de' },
+	{ name: 'Hindi', locale: 'hi' },
+	{ name: 'Italian', locale: 'it' },
+	{ name: 'Bengali', locale: 'bn' },
+	{ name: 'Malay', locale: 'ms' },
+	{ name: 'Swedish', locale: 'sv' },
+	{ name: 'Urdu', locale: 'ur' },
 ];
 
 function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
@@ -151,9 +151,12 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 							onClose={handleClose}
 							anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 						>
-							{languages.map((locale) => (
-								<MenuItem key={locale} onClick={() => handleClose(locale)}>
-									{locale.toUpperCase()}
+							{languages.map((lang) => (
+								<MenuItem
+									key={lang.locale}
+									onClick={() => handleClose(lang.locale)}
+								>
+									{lang.name}
 								</MenuItem>
 							))}
 						</Menu>
