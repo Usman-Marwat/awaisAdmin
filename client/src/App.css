@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto&display=swap");
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none !important;
+}
+.my__continer > div:nth-child(1) {
+  /* display: none; */
+}
+div#\:0\.targetLanguage select:nth-child(1) {
+  display: none;
+}
+.skiptranslate.goog-te-gadget span {
+  display: none;
+}
+.goog-te-gadget {
+  font-family: arial;
+  font-size: 0px !important;
+  color: #fff;
+  white-space: nowrap;
+}

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import {
 	Box,
-	Button,
 	FormControl,
 	InputLabel,
 	MenuItem,
 	Select,
-	Typography,
 	useMediaQuery,
 	useTheme,
 } from '@mui/material';
@@ -18,7 +16,6 @@ import {
 
 import Header from '../../components/Header';
 import { ProductSalesData, productCategories } from '../../data';
-import { useCheckOutMutation } from '../../state/api';
 import commisionReport from '../../data/commisionReport';
 import walletRecharge from '../../data/walletRecharge';
 import wishlistDataset from '../../data/wishlistDataset';
@@ -32,7 +29,6 @@ const Reports = () => {
 	const [data, setData] = useState(ProductSalesData);
 	const [pageSize, setPageSize] = useState(20);
 	const [category, setCategory] = useState('All');
-	const [checkout] = useCheckOutMutation();
 
 	const columns = [
 		{
@@ -78,38 +74,9 @@ const Reports = () => {
 		setData(ProductSalesData.filter((p) => p.Product_Category === val));
 	};
 
-	const handleCheckOut = async () => {
-		// checkout({
-		// 	items: [
-		// 		{
-		// 			id: 'price_1Nb5g7FY0kg8jzx8uYJTT5a0',
-		// 			quantity: 7,
-		// 		},
-		// 	],
-		// });
-		const { data } = await checkout({
-			items: [
-				{ id: 1, quantity: 3 },
-				{ id: 2, quantity: 1 },
-			],
-		});
-		window.open(data.url);
-	};
-
 	return (
 		<Box m="1.5rem 2rem">
 			<Header title="Reports" subtitle="All Sales Reports" />
-
-			<Box sx={{ marginTop: 1 }}>
-				<Button
-					type="submit"
-					color="secondary"
-					variant="contained"
-					onClick={handleCheckOut}
-				>
-					<Typography mr="0.7rem">CheckOut</Typography>
-				</Button>
-			</Box>
 
 			<Box
 				height="80vh"

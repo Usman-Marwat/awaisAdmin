@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Box, useTheme } from '@mui/material';
+import { Box, Button, useTheme } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { useGetTransactionsQuery } from '../../state/api';
+import { useCheckOutMutation, useGetTransactionsQuery } from '../../state/api';
 import Header from '../../components/Header';
 import DataGridCustomToolbar from '../../components/DataGridCustomToolbar';
+import Text from '../../components/Text';
 
 const Transactions = () => {
 	const theme = useTheme();
@@ -22,6 +23,7 @@ const Transactions = () => {
 		sort: JSON.stringify(sort),
 		search,
 	});
+	const [checkout] = useCheckOutMutation();
 
 	const columns = [
 		{
@@ -54,9 +56,38 @@ const Transactions = () => {
 		},
 	];
 
+	const handleCheckOut = async () => {
+		// checkout({
+		// 	items: [
+		// 		{
+		// 			id: 'price_1Nb5g7FY0kg8jzx8uYJTT5a0',
+		// 			quantity: 7,
+		// 		},
+		// 	],
+		// });
+		const { data } = await checkout({
+			items: [
+				{ id: 1, quantity: 3 },
+				{ id: 2, quantity: 1 },
+			],
+		});
+		window.open(data.url);
+	};
+
 	return (
 		<Box m="1.5rem 2.5rem">
 			<Header title="Transactions" subtitle="Entire list of transactions" />
+
+			<Box sx={{ marginTop: 1 }}>
+				<Button
+					type="submit"
+					color="secondary"
+					variant="contained"
+					onClick={handleCheckOut}
+				>
+					<Text mr="0.7rem">CheckOut</Text>
+				</Button>
+			</Box>
 			<Box
 				height="80vh"
 				sx={{

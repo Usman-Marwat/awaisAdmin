@@ -82,7 +82,7 @@ app.post('/create-checkout-session', async (req, res) => {
 				const storeItem = storeItems.get(item.id);
 				return {
 					price_data: {
-						currency: 'usd',
+						currency: 'pkr',
 						product_data: {
 							name: storeItem.name,
 						},
