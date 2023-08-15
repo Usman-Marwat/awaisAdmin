@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
 	LightModeOutlined,
 	DarkModeOutlined,
 	Menu as MenuIcon,
 	Search,
-	SettingsOutlined,
+	Language,
 	ArrowDropDownOutlined,
 } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
@@ -26,6 +26,7 @@ import FlexBetween from './FlexBetween';
 import { setMode } from '../state';
 import profileImage from '../assets/profile.jpeg';
 import { useSearchParams } from 'react-router-dom';
+import Text from './Text';
 
 const languages = [
 	{ name: 'English', locale: 'en' },
@@ -55,13 +56,16 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 	const handleClick = (event) => setAnchorEl(event.currentTarget);
 	// const handleClose = () => setAnchorEl(null);
 	const handleClose = (locale) => {
+		const lcoales = languages.map((lang) => lang.locale);
+		if (!lcoales.includes(locale)) return;
+
 		setSearchParams({ lng: locale });
 		window.location.reload();
 	};
 
-	// useEffect(() => {
-	// 	window.location.reload();
-	// }, [searchParams]);
+	const navigateToClientApp = () => {
+		window.open('https://ase-ecommerce-cleint-portal.vercel.app/');
+	};
 
 	return (
 		<AppBar
@@ -102,9 +106,6 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 							<LightModeOutlined sx={{ fontSize: '25px' }} />
 						)}
 					</IconButton>
-					<IconButton>
-						<SettingsOutlined sx={{ fontSize: '25px' }} />
-					</IconButton>
 
 					<FlexBetween>
 						<Button
@@ -114,10 +115,10 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 								justifyContent: 'space-between',
 								alignItems: 'center',
 								textTransform: 'none',
-								gap: '1rem',
+								// gap: '1rem',
 							}}
 						>
-							<Box
+							{/* <Box
 								component="img"
 								alt="profile"
 								src={profileImage}
@@ -125,8 +126,11 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 								width="32px"
 								borderRadius="50%"
 								sx={{ objectFit: 'cover' }}
+							/> */}
+							<Language
+								sx={{ fontSize: '25px', color: theme.palette.secondary[50] }}
 							/>
-							<Box textAlign="left">
+							{/* <Box textAlign="left">
 								<Typography
 									fontWeight="bold"
 									fontSize="0.85rem"
@@ -140,7 +144,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 								>
 									{user.occupation}
 								</Typography>
-							</Box>
+							</Box> */}
 							<ArrowDropDownOutlined
 								sx={{ color: theme.palette.secondary[300], fontSize: '25px' }}
 							/>
@@ -161,6 +165,11 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
 							))}
 						</Menu>
 					</FlexBetween>
+					<Button onClick={navigateToClientApp} color="primary">
+						<Text sx={{ color: theme.palette.secondary[50] }}>
+							Client Portal
+						</Text>
+					</Button>
 				</FlexBetween>
 			</Toolbar>
 		</AppBar>
