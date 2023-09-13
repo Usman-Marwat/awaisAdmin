@@ -12,6 +12,7 @@ import generalRoutes from './routes/general.js';
 import managementRoutes from './routes/management.js';
 import salesRoutes from './routes/sales.js';
 import productRoutes from './routes/product.js';
+import auctionRoutes from './routes/auction.js';
 
 /* CONFIGURATION */
 dotenv.config();
@@ -30,6 +31,7 @@ app.use('/general', generalRoutes);
 app.use('/management', managementRoutes);
 app.use('/sales', salesRoutes);
 app.use('/product', productRoutes);
+app.use('/auction', auctionRoutes);
 
 app.use(express.static('public'));
 
