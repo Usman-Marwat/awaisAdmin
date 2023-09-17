@@ -22,4 +22,5 @@ const AuctionSchema = new mongoose.Schema(
 );
 
 const Auction = mongoose.model('Auction', AuctionSchema);
+
 export default Auction;

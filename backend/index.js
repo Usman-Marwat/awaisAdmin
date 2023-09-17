@@ -13,19 +13,21 @@ import managementRoutes from './routes/management.js';
 import salesRoutes from './routes/sales.js';
 import productRoutes from './routes/product.js';
 import auctionRoutes from './routes/auction.js';
+import authRoutes from './routes/auth.js';
 
 /* CONFIGURATION */
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
+// app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 app.use(morgan('common'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 /* ROUTES */
+app.use('/auth', authRoutes);
 app.use('/client', clientRoutes);
 app.use('/general', generalRoutes);
 app.use('/management', managementRoutes);
