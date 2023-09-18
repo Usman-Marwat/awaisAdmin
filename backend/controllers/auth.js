@@ -1,6 +1,4 @@
-// const jwt = require('jsonwebtoken');
-// const mongoose = require('mongoose');
-
+import jwt from 'jsonwebtoken';
 import Member from '../models/Member.js';
 
 const handleMongooseErrors = (err) => {
@@ -38,33 +36,14 @@ export const signUp = async (req, res) => {
 };
 
 export const signIn = async (req, res) => {
-	const { email, password, actor } = req.body;
+	const { email, password } = req.body;
 	try {
-		const user = await User.login(actor, email, password);
-		let actordb = null;
-		const filter = { user_id: user.id };
-		if (actor === 'Contractor') actordb = await Contractor.find(filter);
-		else if (actor === 'Customer') actordb = await Customer.find(filter);
-		else if (actor === 'Employee') actordb = await Employee.find(filter);
-		else if (actor === 'Supplier') actordb = await Supplier.find(filter);
+		const member = await Member.login(email, password);
+		const token = jwt.sign({ ...member }, 'jwtPrivateKey');
 
-		const token = jwt.sign(
-			{
-				actor_id: actordb[0].id,
-				user_id: user.id,
-				actor: user.actor,
-				name: actordb[0].name,
-				email: user.email,
-				phone: user.phone,
-				image: actordb[0].image,
-			},
-			'jwtPrivateKey'
-		);
-
-		res.status(201).send(token);
+		res.status(201).send({ member, token });
 	} catch (err) {
 		const errors = handleMongooseErrors(err);
-		console.log(errors);
 		res.status(400).send(errors);
 	}
 };
