@@ -45,7 +45,18 @@ export const addBid = async (req, res) => {
 
 		setTimeout(() => {
 			res.status(200).json('bid');
-		}, 2000);
+		}, 1000);
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
+};
+
+export const getBids = async (req, res) => {
+	try {
+		const auction = await Auction.findById(req.query.auctionId);
+		if (auction.bids) return res.status(200).json(auction.bids);
+
+		res.status(200).json([]);
 	} catch (error) {
 		res.status(404).json({ message: error.message });
 	}
