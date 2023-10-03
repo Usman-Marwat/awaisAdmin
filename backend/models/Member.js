@@ -7,14 +7,31 @@ const memberSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		firstName: {
+		displayName: {
 			type: String,
 			required: true,
 		},
-		lastName: {
+		legalName: {
 			type: String,
 			required: true,
 		},
+		country: {
+			type: String,
+			required: true,
+		},
+		mobileNumber: {
+			type: String,
+			required: true,
+		},
+		address: {
+			type: String,
+			required: true,
+		},
+		idCardNo: {
+			type: String,
+			required: true,
+		},
+		idCardImages: [],
 		email: {
 			type: String,
 			required: true,
