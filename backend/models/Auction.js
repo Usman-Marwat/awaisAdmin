@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const AuctionSchema = new mongoose.Schema(
 	{
+		eventId: { type: mongoose.Types.ObjectId, ref: 'Event' },
 		type: String,
 		horseTitle: String,
 		reservedPrice: String,

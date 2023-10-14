@@ -18,3 +18,12 @@ export const getEvents = async (req, res) => {
 		res.status(404).json({ message: error.message });
 	}
 };
+
+export const getEvent = async (req, res) => {
+	try {
+		const event = await Event.findById(req.params.eventId);
+		res.status(200).json(event);
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
+};

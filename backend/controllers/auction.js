@@ -12,7 +12,7 @@ export const addAuction = async (req, res) => {
 
 export const getAuctions = async (req, res) => {
 	try {
-		const auctions = await Auction.find({ type: req.query.type });
+		const auctions = await Auction.find({ eventId: req.query.eventId });
 		res.status(200).json(auctions);
 	} catch (error) {
 		res.status(404).json({ message: error.message });
