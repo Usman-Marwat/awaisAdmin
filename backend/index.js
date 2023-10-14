@@ -15,6 +15,7 @@ import productRoutes from './routes/product.js';
 import authRoutes from './routes/auth.js';
 import auctionRoutes from './routes/auction.js';
 import auctionRequestsRoutes from './routes/auctionRequest.js';
+import eventRoutes from './routes/event.js';
 
 /* CONFIGURATION */
 dotenv.config();
@@ -36,6 +37,7 @@ app.use('/sales', salesRoutes);
 app.use('/product', productRoutes);
 app.use('/auction', auctionRoutes);
 app.use('/auctionRequest', auctionRequestsRoutes);
+app.use('/event', eventRoutes);
 
 app.use(express.static('public'));
 
